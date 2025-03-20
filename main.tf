@@ -1,11 +1,21 @@
 resource "aws_instance" "ec2" {
-  ami = var.ami
-  instance_type = var.instance_type
-  key_name = var.key_pair
-  subnet_id = var.subnet_id
+  for_each = var.instances
+  ami = each.value.ami
+  instance_type = each.value.instance_type
+  key_name = each.value.key_name
+  subnet_id = each.value.subnet_id
   security_groups = [aws_security_group.sg.id]
+  root_block_device {
+    volume_size = each.value.root_block_device.volume_size
+    volume_type = each.value.root_block_device.volume_type
+  }
+  ebs_block_device {
+    device_name = each.value.ebs_block_device.device_name
+    volume_size = each.value.ebs_block_device.volume_size
+    volume_type = each.value.ebs_block_device.volume_type
+  }
 
   tags = {
-    Name = var.ec2_name
+    Name = each.key
   }
 }

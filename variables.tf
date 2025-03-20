@@ -1,28 +1,3 @@
-variable "ec2_name" {
-  type = string
-  default = ""
-}
-
-variable "ami" {
-  type = string
-  default = ""
-}
-
-variable "instance_type" {
-  type = string
-  default = "t2.micro"
-}
-
-variable "key_pair" {
-  type = string
-  default = ""
-}
-
-variable "subnet_id" {
-  type = string
-  default = ""
-}
-
 variable "sg_inbound_rules" {
   type = map(object({
     source = string
@@ -40,4 +15,22 @@ variable "sg_name" {
 variable "vpc_id" {
   type = string
   default = ""
+}
+
+variable "instances" {
+  type = map(object({
+    ami = string
+    instance_type = string
+    key_name = string
+    subnet_id = string
+    root_block_device = object({
+      volume_size = number
+      volume_type = string
+    })
+    ebs_block_device = object({
+      device_name = string
+      volume_size = number
+      volume_type = string
+    })
+  }))
 }
