@@ -9,10 +9,13 @@ resource "aws_instance" "ec2" {
     volume_size = each.value.root_block_device.volume_size
     volume_type = each.value.root_block_device.volume_type
   }
-  ebs_block_device {
-    device_name = each.value.ebs_block_device.device_name
-    volume_size = each.value.ebs_block_device.volume_size
-    volume_type = each.value.ebs_block_device.volume_type
+  dynamic "ebs_block_device" {
+    for_each = each.value.ebs_block_device
+    content {
+      device_name = ebs_block_device.value.device_name
+      volume_size = ebs_block_device.value.volume_size
+      volume_type = ebs_block_device.value.volume_type
+    }
   }
 
   tags = {

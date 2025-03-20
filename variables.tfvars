@@ -1,4 +1,4 @@
-vpc_id = "vpc-0a161cc6ccb2f5134"
+vpc_id = "vpc-00630eb309cc3939f"
 
 sg_inbound_rules = {
   allow_ssh = {
@@ -20,30 +20,35 @@ instances = {
     ami = "ami-08b5b3a93ed654d19"
     instance_type = "t2.micro"
     key_name = "linux-general"
-    subnet_id = "subnet-05350bc83792c4c0b"
+    subnet_id = "subnet-03a9b5e35d8553b17"
     root_block_device = {
       volume_size = 10
       volume_type = "gp2"
     }
-    ebs_block_device = {
+    ebs_block_device = [{
       device_name = "/dev/xvdb"
       volume_size = 10
       volume_type = "gp2"
-  }
+  }]
   }
   server2 = {
     ami = "ami-08b5b3a93ed654d19"
     instance_type = "t2.micro"
     key_name = "linux-general"
-    subnet_id = "subnet-08405213b795b5c3f"
+    subnet_id = "subnet-0ad63d2539665045d"
     root_block_device = {
       volume_size = 10
       volume_type = "gp2"
     }
-    ebs_block_device = {
+    ebs_block_device = [{
       device_name = "/dev/xvdb"
       volume_size = 10
       volume_type = "gp2"
-    }
+    },
+    {
+      device_name = "/dev/xvdc"
+      volume_size = 10
+      volume_type = "gp2"
+    }]
   }
 }

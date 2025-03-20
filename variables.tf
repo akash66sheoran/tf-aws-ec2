@@ -27,10 +27,10 @@ variable "instances" {
       volume_size = number
       volume_type = string
     })
-    ebs_block_device = object({
+    ebs_block_device = list(object({
       device_name = string
       volume_size = number
       volume_type = string
-    })
+    }))
   }))
 }
