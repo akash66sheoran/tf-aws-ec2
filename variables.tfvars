@@ -1,4 +1,4 @@
-vpc_id = "vpc-00630eb309cc3939f"
+vpc_id = "vpc-06e03ceca3fdca94d"
 
 sg_inbound_rules = {
   allow_ssh = {
@@ -20,7 +20,7 @@ instances = {
     ami = "ami-08b5b3a93ed654d19"
     instance_type = "t2.micro"
     key_name = "linux-general"
-    subnet_id = "subnet-03a9b5e35d8553b17"
+    subnet_id = "subnet-0b04b046fd7f57013"
     root_block_device = {
       volume_size = 10
       volume_type = "gp2"
@@ -35,7 +35,7 @@ instances = {
     ami = "ami-08b5b3a93ed654d19"
     instance_type = "t2.micro"
     key_name = "linux-general"
-    subnet_id = "subnet-0ad63d2539665045d"
+    subnet_id = "subnet-019127a250d7bba4d"
     root_block_device = {
       volume_size = 10
       volume_type = "gp2"
@@ -51,4 +51,25 @@ instances = {
       volume_type = "gp2"
     }]
   }
+}
+
+managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore", "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"]
+
+inline_policies = {
+  s3_policy = {
+      Version = "2012-10-17"
+      Statement = [{
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket", "s3:GetObject"]
+        Resource = ["*"]
+      }]
+    },
+    ec2_policy = {
+      Version = "2012-10-17"
+      Statement = [{
+        Effect   = "Allow"
+        Action   = ["ec2:DescribeInstances", "ec2:DescribeVolumes"]
+        Resource = ["*"]
+      }]
+    }
 }

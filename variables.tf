@@ -34,3 +34,31 @@ variable "instances" {
     }))
   }))
 }
+
+variable "iam_instance_profile" {
+  type = string
+  default = "my-instance-profile"
+}
+
+variable "ec2_role_name" {
+  type = string
+  default = "ec2-role"
+}
+
+variable "managed_policy_arns" {
+  type        = list(string)
+  default     = []
+}
+
+variable "inline_policies" {
+  description = "Map of inline policies to attach to the role. Each policy is defined as an object."
+  type = map(object({
+    Version   = string
+    Statement = list(object({
+      Effect   = string
+      Action   = list(string)
+      Resource = list(string)
+    }))
+  }))
+  default = {}
+}
