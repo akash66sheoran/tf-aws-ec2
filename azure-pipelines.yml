@@ -17,11 +17,11 @@ stages:
           inputs:
             terraformVersion: 'latest'
 
-        - task: TerraformTaskV4@4
-          displayName: "Terraform init"
+        - task: Bash@3
           inputs:
-            provider: 'aws'
-            command: 'init'
-            backendServiceAWS: 'tod-aws-service-connection'
-            backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'terraform.tfstate'
+            targetType: 'inline'
+            script: |
+              pwd
+              ls -lrt
+              terraform init
+              terraform plan --var-file=variables.tfvars
