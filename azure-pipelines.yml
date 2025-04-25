@@ -10,7 +10,7 @@ variables:
 stages:
   - stage: TerraformWorkflow
     jobs:
-    - job: InstallTerraform
+    - job: TerraformInitPlan
       steps:
         - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
           displayName: Install terraform
