@@ -1,0 +1,17 @@
+trigger: main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  terraformVersion: '1.10.5'
+  workspaceName: 'dev'
+
+stages:
+  - stage: InstallTerraform
+    jobs:
+    - job: InstallTerraform
+      steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
