@@ -1,19 +1,19 @@
-vpc_id        = ""
-sg_name       = ""
-already_existing_role = ""  # pass this value if you already have an existing role and you don't want to create a new role
+vpc_id        = "vpc-0e2e6b5c94514a787"
+sg_name       = "tod-sg"
+already_existing_role = "my-ec2-role"  # pass this value if you already have an existing role and you don't want to create a new role
 ec2_role_name = "" # if the value of already_existing_role is not provided, then a new role will be created with this name
 
 instances = {
   server-1 = {
-    ami           = ""
-    instance_type = ""
-    key_name      = ""
-    subnet_id     = ""
+    ami           = "ami-0e449927258d45bc4"
+    instance_type = "t2.micro"
+    key_name      = "linux-key"
+    subnet_id     = "subnet-05f86265cf120e43e"
     root_block_device = {
       volume_size = 8
       volume_type = "gp3"
     }
-    tags = {}
+    tags = {Project = "TOD"}
   }
 }
 
