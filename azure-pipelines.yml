@@ -24,3 +24,6 @@ stages:
             inputs:
               provider: 'aws'
               command: 'init'
+              backendServiceAWS: 'tod-aws-service-connection'
+              backendAWSBucketName: 'tod-tf-state-store'
+              backendAWSKey: 'terraform.tfstate'
