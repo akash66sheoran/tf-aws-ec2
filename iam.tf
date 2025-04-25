@@ -1,4 +1,7 @@
-resource "aws_iam_role" "instance_role" {
+resource "aws_iam_role" "ec2_role" {
+
+  count = var.already_existing_role == "" ? 1 : 0
+
   name = var.ec2_role_name
 
   assume_role_policy = jsonencode({
@@ -15,25 +18,40 @@ resource "aws_iam_role" "instance_role" {
     ]
   })
 
-#   tags = {
-#     Name = "tag-value"
-#   }
 }
 
-resource "aws_iam_role_policy_attachment" "policy_attachment" {
-  for_each   = toset(var.managed_policy_arns)
-  role       = aws_iam_role.instance_role.name
-  policy_arn = each.value
+locals {
+  role_name = var.already_existing_role == "" ? aws_iam_role.ec2_role[0].name : var.already_existing_role
 }
 
-resource "aws_iam_role_policy" "inline_policies" {
-  for_each = var.inline_policies
-  name     = each.key
-  role     = aws_iam_role.instance_role.name
-  policy   = jsonencode(each.value)
+resource "aws_iam_role_policy_attachment" "managed" {
+  count      = var.already_existing_role == "" ? length(var.managed_policy_arns) : 0
+  role       = local.role_name
+  policy_arn = var.managed_policy_arns[count.index]
 }
+
+locals {
+  policy_files = fileset("${path.module}/policies", "*.json")
+  inline_policies = {
+    for f in local.policy_files :
+    f => file("${path.module}/policies/${f}")
+  }
+}
+
+resource "aws_iam_role_policy" "custom" {
+  # only populate when we're creating a new role
+  for_each = var.already_existing_role == "" ? local.inline_policies : {}
+
+  # each.key is e.g. "my-policy.json"
+  name   = replace(each.key, ".json", "")
+  policy = each.value
+  role   = local.role_name
+}
+
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = var.iam_instance_profile
-  role = aws_iam_role.instance_role.id
+  for_each = var.instances
+
+  name = "${each.key}-instance-profile"
+  role = local.role_name
 }
