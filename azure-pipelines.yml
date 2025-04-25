@@ -8,7 +8,7 @@ variables:
   workspaceName: 'dev'
 
 stages:
-  - stage: InstallTerraform
+  - stage: TerraformWorkflow
     jobs:
     - job: InstallTerraform
       steps:
@@ -16,14 +16,12 @@ stages:
           inputs:
             terraformVersion: 'latest'
 
-  - stage: TerraformInit
-    jobs:
-      - job: TerraformInit
-        steps:
-          - task: TerraformTaskV4@4
-            inputs:
-              provider: 'aws'
-              command: 'init'
-              backendServiceAWS: 'tod-aws-service-connection'
-              backendAWSBucketName: 'tod-tf-state-store'
-              backendAWSKey: 'terraform.tfstate'
+    - job: TerraformInit
+      steps:
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'aws'
+            command: 'init'
+            backendServiceAWS: 'tod-aws-service-connection'
+            backendAWSBucketName: 'tod-tf-state-store'
+            backendAWSKey: 'terraform.tfstate'
