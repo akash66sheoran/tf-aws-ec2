@@ -15,3 +15,12 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
+
+  - stage: TerraformInit
+    jobs:
+      - job: TerraformInit
+        steps:
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'aws'
+              command: 'init'
