@@ -12,10 +12,10 @@ stages:
     jobs:
     - job: InstallTerraform
       steps:
-        - task: TerraformInstaller@1
-          displayName: "Install Terraform"
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+          displayName: Install terraform
           inputs:
-            terraformVersion: 'latest'
+            terraformVersion: 1.10.0
 
         - task: Bash@3
           inputs:
