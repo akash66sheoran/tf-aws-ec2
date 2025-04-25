@@ -55,3 +55,30 @@ stages:
                   ls -lrt
                   terraform init
                   terraform apply --var-file=variables.tfvars --auto-approve
+
+  - stage: TerraformDestroy
+    jobs:
+    - deployment: TerraformDestroy
+      displayName: "Destroy infra"
+      environment: tf-aws-ec2-linux-env
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+            - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+              displayName: "Install terraform"
+              inputs:
+                terraformVersion: 1.10.0
+            
+            - task: AWSShellScript@1
+              displayName: "Terraform apply"
+              inputs:
+                awsCredentials: 'tod-aws'
+                regionName: 'us-east-1'
+                scriptType: 'inline'
+                inlineScript: |
+                  pwd
+                  ls -lrt
+                  terraform init
+                  terraform destroy --var-file=variables.tfvars --auto-approve
