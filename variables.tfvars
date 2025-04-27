@@ -41,15 +41,11 @@ sg_inbound_rules = {
 sg_outbound_rules = {
   "allow_all_ipv4" = {
     cidr_ipv4   = "0.0.0.0/0"
-    from_port   = 0
     ip_protocol = "-1"
-    to_port     = 0
   }
   "allow_all_ipv6" = {
     cidr_ipv6   = "::/0"
-    from_port   = 0
     ip_protocol = "-1"
-    to_port     = 0
   }
 }
 
