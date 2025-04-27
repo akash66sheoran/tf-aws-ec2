@@ -39,13 +39,11 @@ stages:
             backendAWSBucketName: 'tod-tf-state-store'
             backendAWSKey: 'terraform.tfstate'
         
-        - task: TerraformTask@5
-          displayName: terraform workspace
-          inputs:
-            provider: 'aws'
-            command: 'workspace'
-            commandOptions: 'new $(workspace)'
-            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+        - script: |
+            terraform workspace new $(workspaceName) || terraform workspace select $(workspaceName)
+          displayName: workspace
+          env:
+            AWS_SERVICE_CONNECTION: par-terraform-np
         
         - task: TerraformTask@5
           displayName: 'terraform plan'
