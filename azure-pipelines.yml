@@ -12,8 +12,13 @@ parameters:
   - name: workspaceName
 
 variables:
-  terraformVersion: '1.10.5'
-  workspaceName: 'dev'
+  - name: terraformVersion
+    value: '1.10.5'
+  - name: backendServiceAWS
+    ${{ if eq( parameters.target_env, 'par-np')}}:
+      value: "par-terraform-np"
+    ${{ if eq( parameters.target_env, 'par-prod')}}:
+      value: "par-terraform-prod"
 
 stages:
   - stage: TerraformInitPlan
