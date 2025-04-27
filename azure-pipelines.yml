@@ -43,7 +43,7 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'terraform workspace new ${{ parameters.workspaceName }}'
+            customCommand: 'workspace new ${{ parameters.workspaceName }}'
             environmentServiceNameAWS: 'par-terraform-np'
         
         - task: TerraformTask@5
@@ -68,7 +68,7 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'terraform workspace select ${{ parameters.workspaceName }}'
+            customCommand: 'workspace select ${{ parameters.workspaceName }}'
             environmentServiceNameAWS: 'par-terraform-np'
           
         - task: TerraformTask@5
