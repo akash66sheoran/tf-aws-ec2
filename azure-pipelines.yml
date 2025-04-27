@@ -9,11 +9,9 @@ parameters:
       - par-np
       - par-prod
 
-  # - name: workspaceName
+  - name: workspaceName
 
 variables:
-  - name: workspace
-    value: dev
   - name: backendServiceAWS
     ${{ if eq( parameters.target_env, 'par-np')}}:
       value: "par-terraform-np"
@@ -40,10 +38,10 @@ stages:
             backendAWSKey: 'terraform.tfstate'
         
         - script: |
-            terraform workspace new $(workspace) || terraform workspace select $(workspace)
+            terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
           displayName: workspace
           env:
-            AWS_SERVICE_CONNECTION: par-terraform-np
+            AWS_SERVICE_CONNECTION: $(backendServiceAWS)
         
         - task: TerraformTask@5
           displayName: 'terraform plan'
@@ -62,10 +60,10 @@ stages:
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
         
         - script: |
-            terraform workspace new $(workspace) || terraform workspace select $(workspace)
+            terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
           displayName: workspace
           env:
-            AWS_SERVICE_CONNECTION: par-terraform-np
+            AWS_SERVICE_CONNECTION: $(backendServiceAWS)
           
         - task: TerraformTask@5
           displayName: 'terraform destroy'
