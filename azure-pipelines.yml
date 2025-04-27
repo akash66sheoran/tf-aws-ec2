@@ -29,9 +29,17 @@ stages:
             terraformVersion: 'latest'
 
         - task: TerraformTask@5
+          displayName: 'terraform init'
           inputs:
             provider: 'aws'
             command: 'init'
             backendServiceAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
             backendAWSKey: 'terraform.tfstate'
+        
+        - task: TerraformTask@5
+          inputs:
+            provider: 'aws'
+            command: 'plan'
+            commandOptions: '--var-file=variables.tfvars'
+            environmentServiceNameAWS: 'par-terraform-np'
