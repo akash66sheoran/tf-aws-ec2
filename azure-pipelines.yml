@@ -44,6 +44,8 @@ stages:
             command: 'plan'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+            backendAWSBucketName: 'tod-tf-state-store'
+            backendAWSKey: 'terraform.tfstate'
 
         - task: TerraformTask@5
           displayName: 'terraform apply'
@@ -52,8 +54,5 @@ stages:
             command: 'apply'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
-        
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: 'ls $(system.defaultworkingdirectory)'
+            backendAWSBucketName: 'tod-tf-state-store'
+            backendAWSKey: 'terraform.tfstate'
