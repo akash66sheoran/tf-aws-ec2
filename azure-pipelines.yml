@@ -38,6 +38,7 @@ stages:
             backendAWSKey: 'terraform.tfstate'
         
         - task: TerraformTask@5
+          displayName: 'terraform plan'
           inputs:
             provider: 'aws'
             command: 'plan'
