@@ -4,7 +4,7 @@ already_existing_role = "my-ec2-role"  # pass this value if you already have an 
 ec2_role_name = "" # if the value of already_existing_role is not provided, then a new role will be created with this name
 
 instances = {
-  server = {
+  serverrrrrrrrrrrrrrrrr = {
     ami           = "ami-0e449927258d45bc4"
     instance_type = "t2.micro"
     key_name      = "linux-key"
