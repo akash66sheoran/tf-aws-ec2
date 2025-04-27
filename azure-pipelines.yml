@@ -44,7 +44,9 @@ stages:
             command: 'plan'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+
         - task: TerraformTask@5
+          displayName: 'terraform apply'
           inputs:
             provider: 'aws'
             command: 'apply'
