@@ -12,9 +12,9 @@ resource "aws_vpc_security_group_ingress_rule" "inbound_rules" {
   for_each          = var.sg_inbound_rules
   cidr_ipv4         = try(each.value.cidr_ipv4, null)
   cidr_ipv6         = try(each.value.cidr_ipv6, null)
-  from_port         = each.value.from_port
+  from_port         = try(each.value.from_port, null)
   ip_protocol       = each.value.ip_protocol
-  to_port           = each.value.to_port
+  to_port           = try(each.value.to_port, null)
 }
 
 resource "aws_vpc_security_group_egress_rule" "outbound_rules" {
@@ -22,7 +22,7 @@ resource "aws_vpc_security_group_egress_rule" "outbound_rules" {
   for_each          = var.sg_outbound_rules
   cidr_ipv4         = try(each.value.cidr_ipv4, null)
   cidr_ipv6         = try(each.value.cidr_ipv6, null)
-  from_port         = each.value.from_port
+  from_port         = try(each.value.from_port, null)
   ip_protocol       = each.value.ip_protocol
-  to_port           = each.value.to_port
+  to_port           = try(each.value.to_port, null)
 }
