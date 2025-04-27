@@ -2,8 +2,8 @@ variable "sg_inbound_rules" {
   type = map(object({
     cidr_ipv4   = optional(string)
     cidr_ipv6   = optional(string)
-    from_port   = number
-    to_port     = number
+    from_port   = optional(number)
+    to_port     = optional(number)
     ip_protocol = string
   }))
   default = {}
@@ -13,8 +13,8 @@ variable "sg_outbound_rules" {
   type = map(object({
     cidr_ipv4   = optional(string)
     cidr_ipv6   = optional(string)
-    from_port   = number
-    to_port     = number
+    from_port   = optional(number)
+    to_port     = optional(number)
     ip_protocol = string
   }))
   default = {}
