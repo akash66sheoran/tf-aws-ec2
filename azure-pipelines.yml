@@ -33,14 +33,14 @@ stages:
         - task: AWSShellScript@1
           displayName: "Terraform init and plan"
           inputs:
-            awsCredentials: 'tod-aws'
+            awsCredentials: '${variables.backendServiceAWS}'
             regionName: 'us-east-1'
             scriptType: 'inline'
             inlineScript: |
               pwd
               ls -lrt
               terraform init
-              terraform workspace select $(workspaceName) || terraform workspace new $(workspaceName)
+              terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
               terraform plan --var-file=variables.tfvars
             
   - stage: TerraformInitApply
@@ -61,14 +61,14 @@ stages:
             - task: AWSShellScript@1
               displayName: "Terraform apply"
               inputs:
-                awsCredentials: 'tod-aws'
+                awsCredentials: '${variables.backendServiceAWS}'
                 regionName: 'us-east-1'
                 scriptType: 'inline'
                 inlineScript: |
                   pwd
                   ls -lrt
                   terraform init
-                  terraform workspace select $(workspaceName) || terraform workspace new $(workspaceName)
+                  terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
                   terraform apply --var-file=variables.tfvars --auto-approve
 
   - stage: TerraformDestroy
@@ -87,14 +87,14 @@ stages:
                 terraformVersion: 1.10.0
             
             - task: AWSShellScript@1
-              displayName: "Terraform apply"
+              displayName: "Terraform destroy"
               inputs:
-                awsCredentials: 'tod-aws'
+                awsCredentials: '${variables.backendServiceAWS}'
                 regionName: 'us-east-1'
                 scriptType: 'inline'
                 inlineScript: |
                   pwd
                   ls -lrt
                   terraform init
-                  terraform workspace select $(workspaceName) || terraform workspace new $(workspaceName)
+                  terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
                   terraform destroy --var-file=variables.tfvars --auto-approve
