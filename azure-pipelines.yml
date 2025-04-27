@@ -50,3 +50,8 @@ stages:
             command: 'apply'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+        
+        - task: Bash@3
+          inputs:
+            targetType: 'inline'
+            script: 'ls $(system.defaultworkingdirectory)'
