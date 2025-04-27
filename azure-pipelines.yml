@@ -44,8 +44,6 @@ stages:
             command: 'plan'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
-            backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'terraform.tfstate'
 
         - task: TerraformTask@5
           displayName: 'terraform apply'
@@ -54,5 +52,11 @@ stages:
             command: 'apply'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
-            backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'terraform.tfstate'
+          
+        - task: TerraformTask@5
+          displayName: 'terraform destroy'
+          inputs:
+            provider: 'aws'
+            command: 'destroy'
+            commandOptions: '--var-file=variables.tfvars'
+            environmentServiceNameAWS: 'par-terraform-np'
