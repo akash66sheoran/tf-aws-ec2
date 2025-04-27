@@ -23,11 +23,9 @@ stages:
     jobs:
     - job: TerraformInitPlan
       steps:
-        - script: "echo ${{variables.backendServiceAWS}}"
-        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-          displayName: Install terraform
+        - task: TerraformInstaller@1
           inputs:
-            terraformVersion: '1.10.0'
+            terraformVersion: 'latest'
         
         # - task: AWSShellScript@1
         #   displayName: "Terraform init and plan"
@@ -42,24 +40,13 @@ stages:
         #       terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
         #       terraform plan --var-file=variables.tfvars
 
-        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV4@4
-          displayName: "terraform init"
+        - task: TerraformTask@5
           inputs:
             provider: 'aws'
             command: 'init'
             backendServiceAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
-        
-        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV4@4
-          displayName: "terraform plan"
-          inputs:
-            provider: 'aws'
-            command: 'plan'
-            commandOptions: '--var-file=variables.tfvars'
-            environmentServiceNameAWS: 'par-terraform-np'
-            backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
+            backendAWSKey: '''tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'''
             
   # - stage: TerraformInitApply
   #   jobs:
