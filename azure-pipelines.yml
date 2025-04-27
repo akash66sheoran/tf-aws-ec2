@@ -3,20 +3,20 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
-# parameters:
-#   - name: target_env
-#     values:
-#       - par-np
-#       - par-prod
+parameters:
+  - name: target_env
+    values:
+      - par-np
+      - par-prod
 
-  # - name: workspaceName
+  - name: workspaceName
 
-# variables:
-#   - name: backendServiceAWS
-#     ${{ if eq( parameters.target_env, 'par-np')}}:
-#       value: "par-terraform-np"
-#     ${{ if eq( parameters.target_env, 'par-prod')}}:
-#       value: "par-terraform-prod"
+variables:
+  - name: backendServiceAWS
+    ${{ if eq( parameters.target_env, 'par-np')}}:
+      value: "par-terraform-np"
+    ${{ if eq( parameters.target_env, 'par-prod')}}:
+      value: "par-terraform-prod"
 
 stages:
   - stage: TerraformInitPlan
@@ -43,11 +43,10 @@ stages:
             provider: 'aws'
             command: 'plan'
             commandOptions: '--var-file=variables.tfvars'
-            environmentServiceNameAWS: 'par-terraform-np'
-            backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'terraform.tfstate'
-        
-        - task: Bash@3
+            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+        - task: TerraformTask@5
           inputs:
-            targetType: 'inline'
-            script: 'ls $(System.DefaultWorkingDirectory)'
+            provider: 'aws'
+            command: 'apply'
+            commandOptions: '--var-file=variables.tfvars'
+            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
