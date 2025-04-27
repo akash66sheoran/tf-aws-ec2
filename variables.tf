@@ -67,3 +67,8 @@ variable "managed_policy_arns" {
   type    = list(string)
   default = []
 }
+
+variable "aws_region" {
+  type    = string
+  default = "us-east-1"
+}
