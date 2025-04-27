@@ -9,6 +9,8 @@ parameters:
       - par-np
       - par-prod
 
+  - name: workspaceName
+
 variables:
   terraformVersion: '1.10.5'
   workspaceName: 'dev'
