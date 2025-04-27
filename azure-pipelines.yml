@@ -50,6 +50,7 @@ stages:
             backendServiceAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
             backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
+            backendAWSRegion: 'us-east-1'
         
         - task: TerraformTask@5
           inputs:
@@ -59,6 +60,7 @@ stages:
             environmentServiceNameAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
             backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
+            backendAWSRegion: 'us-east-1'
             
   # - stage: TerraformInitApply
   #   jobs:
