@@ -50,6 +50,13 @@ stages:
             backendServiceAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
             backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
+        
+        - task: TerraformTask@5
+          inputs:
+            provider: 'aws'
+            command: 'plan'
+            commandOptions: '--var-file=variables.tfvars'
+            environmentServiceNameAWS: 'par-terraform-np'
             
   # - stage: TerraformInitApply
   #   jobs:
