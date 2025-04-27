@@ -43,8 +43,8 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'workspace new ${{ parameters.workspaceName }}'
-            environmentServiceNameAWS: 'par-terraform-np'
+            customCommand: 'workspace new $(parameters.workspaceName)'
+            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
         
         - task: TerraformTask@5
           displayName: 'terraform plan'
@@ -68,8 +68,8 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'workspace select ${{ parameters.workspaceName }}'
-            environmentServiceNameAWS: 'par-terraform-np'
+            customCommand: 'workspace select $(parameters.workspaceName)'
+            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
           
         - task: TerraformTask@5
           displayName: 'terraform destroy'
