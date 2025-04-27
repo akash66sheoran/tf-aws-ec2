@@ -61,14 +61,11 @@ stages:
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
         
-        - task: TerraformTask@5
-          displayName: terraform workspace
-          inputs:
-            provider: 'aws'
-            command: 'custom'
-            outputTo: 'console'
-            customCommand: 'workspace select $(workspace)'
-            environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+        - script: |
+            terraform workspace new $(workspace) || terraform workspace select $(workspace)
+          displayName: workspace
+          env:
+            AWS_SERVICE_CONNECTION: par-terraform-np
           
         - task: TerraformTask@5
           displayName: 'terraform destroy'
