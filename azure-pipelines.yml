@@ -43,9 +43,8 @@ stages:
           displayName: terraform workspace
           inputs:
             provider: 'aws'
-            command: 'custom'
-            outputTo: 'console'
-            customCommand: 'workspace new $(workspace)'
+            command: 'workspace'
+            commandOptions: 'new $(workspace)'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
         
         - task: TerraformTask@5
