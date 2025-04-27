@@ -3,20 +3,20 @@ trigger: none
 pool:
   vmImage: ubuntu-latest
 
-parameters:
-  - name: target_env
-    values:
-      - par-np
-      - par-prod
+# parameters:
+#   - name: target_env
+#     values:
+#       - par-np
+#       - par-prod
 
-  - name: workspaceName
+  # - name: workspaceName
 
-variables:
-  - name: backendServiceAWS
-    ${{ if eq( parameters.target_env, 'par-np')}}:
-      value: "par-terraform-np"
-    ${{ if eq( parameters.target_env, 'par-prod')}}:
-      value: "par-terraform-prod"
+# variables:
+#   - name: backendServiceAWS
+#     ${{ if eq( parameters.target_env, 'par-np')}}:
+#       value: "par-terraform-np"
+#     ${{ if eq( parameters.target_env, 'par-prod')}}:
+#       value: "par-terraform-prod"
 
 stages:
   - stage: TerraformInitPlan
@@ -24,90 +24,14 @@ stages:
     - job: TerraformInitPlan
       steps:
         - task: TerraformInstaller@1
+          displayName: 'Install terraform'
           inputs:
             terraformVersion: 'latest'
-        
-        # - task: AWSShellScript@1
-        #   displayName: "Terraform init and plan"
-        #   inputs:
-        #     awsCredentials: '${variables.backendServiceAWS}'
-        #     regionName: 'us-east-1'
-        #     scriptType: 'inline'
-        #     inlineScript: |
-        #       pwd
-        #       ls -lrt
-        #       terraform init
-        #       terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
-        #       terraform plan --var-file=variables.tfvars
 
         - task: TerraformTask@5
-          displayName: 'terraform init'
           inputs:
             provider: 'aws'
             command: 'init'
             backendServiceAWS: 'par-terraform-np'
             backendAWSBucketName: 'tod-tf-state-store'
-            backendAWSKey: 'tf-linux-ec2-workspaces/${{parameters.workspaceName}}/tf-aws-ec2-linux.tfstate'
-          
-        - task: TerraformTask@5
-          inputs:
-            provider: 'aws'
-            command: 'plan'
-            commandOptions: '-var-file=variables.tfvars'
-            environmentServiceNameAWS: 'par-terraform-np'
-            
-  # - stage: TerraformInitApply
-  #   jobs:
-  #   - deployment: TerraformInitApply
-  #     displayName: "Deploy infra"
-  #     environment: tf-aws-ec2-linux-env
-  #     strategy:
-  #       runOnce:
-  #         deploy:
-  #           steps:
-  #           - checkout: self
-  #           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-  #             displayName: "Install terraform"
-  #             inputs:
-  #               terraformVersion: 1.10.0
-            
-  #           - task: AWSShellScript@1
-  #             displayName: "Terraform apply"
-  #             inputs:
-  #               awsCredentials: '${variables.backendServiceAWS}'
-  #               regionName: 'us-east-1'
-  #               scriptType: 'inline'
-  #               inlineScript: |
-  #                 pwd
-  #                 ls -lrt
-  #                 terraform init
-  #                 terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
-  #                 terraform apply --var-file=variables.tfvars --auto-approve
-
-  # - stage: TerraformDestroy
-  #   jobs:
-  #   - deployment: TerraformDestroy
-  #     displayName: "Destroy infra"
-  #     environment: tf-aws-ec2-linux-env
-  #     strategy:
-  #       runOnce:
-  #         deploy:
-  #           steps:
-  #           - checkout: self
-  #           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
-  #             displayName: "Install terraform"
-  #             inputs:
-  #               terraformVersion: 1.10.0
-            
-  #           - task: AWSShellScript@1
-  #             displayName: "Terraform destroy"
-  #             inputs:
-  #               awsCredentials: '${variables.backendServiceAWS}'
-  #               regionName: 'us-east-1'
-  #               scriptType: 'inline'
-  #               inlineScript: |
-  #                 pwd
-  #                 ls -lrt
-  #                 terraform init
-  #                 terraform workspace select ${{parameters.workspaceName}} || terraform workspace new ${{parameters.workspaceName}}
-  #                 terraform destroy --var-file=variables.tfvars --auto-approve
+            backendAWSKey: 'terraform.tfstate'
