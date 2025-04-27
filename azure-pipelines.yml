@@ -9,9 +9,11 @@ parameters:
       - par-np
       - par-prod
 
-  - name: workspaceName
+  # - name: workspaceName
 
 variables:
+  - name: workspace
+    value: dev
   - name: backendServiceAWS
     ${{ if eq( parameters.target_env, 'par-np')}}:
       value: "par-terraform-np"
@@ -43,7 +45,7 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'workspace new $(parameters.workspaceName)'
+            customCommand: 'workspace new $(workspace)'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
         
         - task: TerraformTask@5
@@ -68,7 +70,7 @@ stages:
             provider: 'aws'
             command: 'custom'
             outputTo: 'console'
-            customCommand: 'workspace select $(parameters.workspaceName)'
+            customCommand: 'workspace select $(workspace)'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
           
         - task: TerraformTask@5
