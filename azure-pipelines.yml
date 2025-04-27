@@ -40,7 +40,7 @@ stages:
             backendAWSKey: 'terraform.tfstate'
         
         - script: |
-            terraform workspace new $(workspaceName) || terraform workspace select $(workspaceName)
+            terraform workspace new $(workspace) || terraform workspace select $(workspace)
           displayName: workspace
           env:
             AWS_SERVICE_CONNECTION: par-terraform-np
