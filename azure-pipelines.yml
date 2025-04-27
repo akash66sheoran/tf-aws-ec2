@@ -38,6 +38,15 @@ stages:
             backendAWSKey: 'terraform.tfstate'
         
         - task: TerraformTask@5
+          displayName: terraform workspace
+          inputs:
+            provider: 'aws'
+            command: 'custom'
+            outputTo: 'console'
+            customCommand: 'terraform workspace new ${{ parameters.workspaceName }}'
+            environmentServiceNameAWS: 'par-terraform-np'
+        
+        - task: TerraformTask@5
           displayName: 'terraform plan'
           inputs:
             provider: 'aws'
@@ -52,6 +61,15 @@ stages:
             command: 'apply'
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+        
+        - task: TerraformTask@5
+          displayName: terraform workspace
+          inputs:
+            provider: 'aws'
+            command: 'custom'
+            outputTo: 'console'
+            customCommand: 'terraform workspace select ${{ parameters.workspaceName }}'
+            environmentServiceNameAWS: 'par-terraform-np'
           
         - task: TerraformTask@5
           displayName: 'terraform destroy'
