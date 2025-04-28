@@ -51,28 +51,6 @@ stages:
             commandOptions: '--var-file=variables.tfvars'
             environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
 
-        # - task: TerraformTask@5
-        #   displayName: 'terraform apply'
-        #   inputs:
-        #     provider: 'aws'
-        #     command: 'apply'
-        #     commandOptions: '--var-file=variables.tfvars'
-        #     environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
-        
-        # - script: |
-        #     terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
-        #   displayName: workspace
-        #   env:
-        #     AWS_SERVICE_CONNECTION: $(backendServiceAWS)
-          
-        # - task: TerraformTask@5
-        #   displayName: 'terraform destroy'
-        #   inputs:
-        #     provider: 'aws'
-        #     command: 'destroy'
-        #     commandOptions: '--var-file=variables.tfvars'
-        #     environmentServiceNameAWS: 'par-terraform-np'
-
   - stage: TerraformInitApply
     jobs:
     - deployment: TerraformInitApply
@@ -110,3 +88,41 @@ stages:
                 command: 'apply'
                 commandOptions: '--var-file=variables.tfvars'
                 environmentServiceNameAWS: '${{ variables.backendServiceAWS }}'
+
+  - stage: TerraformDestroy
+    jobs:
+    - deployment: TerraformInitApply
+      displayName: "Destroy infra"
+      environment: tf-aws-ec2-linux-env
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+            - task: TerraformInstaller@1
+              displayName: 'Install terraform'
+              inputs:
+                terraformVersion: 'latest'
+            
+            - task: TerraformTask@5
+              displayName: 'terraform init'
+              inputs:
+                provider: 'aws'
+                command: 'init'
+                backendServiceAWS: 'par-terraform-np'
+                backendAWSBucketName: 'tod-tf-state-store'
+                backendAWSKey: 'terraform.tfstate'
+            
+            - script: |
+                terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
+              displayName: workspace
+              env:
+                AWS_SERVICE_CONNECTION: $(backendServiceAWS)
+            
+            - task: TerraformTask@5
+              displayName: 'terraform destroy'
+              inputs:
+                provider: 'aws'
+                command: 'destroy'
+                commandOptions: '--var-file=variables.tfvars'
+                environmentServiceNameAWS: 'par-terraform-np'
