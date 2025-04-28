@@ -34,8 +34,8 @@ stages:
             provider: 'aws'
             command: 'init'
             backendServiceAWS: 'par-terraform-np'
-            # backendAWSBucketName: 'tod-tf-state-store'
-            # backendAWSKey: 'terraform.tfstate'
+            backendAWSBucketName: 'tod-tf-state-store'
+            backendAWSKey: 'terraform.tfstate'
         
         - script: |
             terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
@@ -72,8 +72,8 @@ stages:
                 provider: 'aws'
                 command: 'init'
                 backendServiceAWS: 'par-terraform-np'
-                # backendAWSBucketName: 'tod-tf-state-store'
-                # backendAWSKey: 'terraform.tfstate'
+                backendAWSBucketName: 'tod-tf-state-store'
+                backendAWSKey: 'terraform.tfstate'
             
             - script: |
                 terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
@@ -110,8 +110,8 @@ stages:
                 provider: 'aws'
                 command: 'init'
                 backendServiceAWS: 'par-terraform-np'
-                # backendAWSBucketName: 'tod-tf-state-store'
-                # backendAWSKey: 'terraform.tfstate'
+                backendAWSBucketName: 'tod-tf-state-store'
+                backendAWSKey: 'terraform.tfstate'
             
             - script: |
                 terraform workspace new ${{ parameters.workspaceName }} || terraform workspace select ${{ parameters.workspaceName }}
